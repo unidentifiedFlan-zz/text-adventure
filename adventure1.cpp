@@ -88,7 +88,7 @@ void setScenes(std::vector<scene> &sceneList, std::vector<std::vector<std::vecto
 	//Recognised inputs
 	std::vector<std::string> valActions = { "1", "Yes", "yes" };
 
-	option doorV0O0(door.position, doorV0.getVer() -1, 0, "Yes",
+	option doorV0O0(door.position, doorV0.getVer()-1, 0, "Yes",
 		"You move toward the table.", valActions, true, table.position);
 
 	door.version[0].addOption(doorV0O0);
@@ -98,7 +98,7 @@ void setScenes(std::vector<scene> &sceneList, std::vector<std::vector<std::vecto
 	//////door: V0 OPTION 2
 	valActions = { "2", "no", "No" };
 
-	option doorV0O1(door.position, doorV0.getVer() - 1, 1, "No",
+	option doorV0O1(door.position, doorV0.getVer()-1, 1, "No",
 		"You continue to watch the door...", valActions, false, door.position);
 
 	door.version[0].addOption(doorV0O1);
@@ -216,25 +216,23 @@ void setScenes(std::vector<scene> &sceneList, std::vector<std::vector<std::vecto
 
 
 	initialiseActionTracker(sceneList, actionTracker);
-	
+
 }
 
 
 
 void initialiseActionTracker(std::vector<scene> &sceneList, std::vector<std::vector<std::vector<bool>>> &actionTracker) {
 
-	std::vector<std::vector<bool>> tempMatrix;
 
 	for (unsigned i = 0; i < sceneList.size(); i++) {
 
-		std::vector<bool> tempVector;
+		std::vector<std::vector<bool>> tempMatrix;
 
 		for (unsigned j = 0; j < sceneList[i].version.size(); j++) {
 			bool tempAction = false;
-			tempVector.clear();
+			std::vector<bool> tempVector;
 			tempVector.assign(sceneList[i].version[j].getSize(), tempAction);
 			tempMatrix.push_back(tempVector);
-
 
 		}
 
