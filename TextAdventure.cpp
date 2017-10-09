@@ -12,7 +12,7 @@ int main(){
 	std::vector<scene> sceneList;
 	std::vector<std::vector<std::vector<bool>>> actionTracker;
 	
-	//Initialise using stored scene values in game-specific header file (e.g adventure1.h)
+	//Initialise using stored scene values in game-specific file and header (e.g adventure.cpp, adventure1.h)
 	setScenes(sceneList, actionTracker);
 	
 	sceneVersion *sceneCurrent;
@@ -30,24 +30,26 @@ int main(){
 		
 		sceneCurrent->sceneOutput();
 		
-		std::cin >> action;
+		if (sceneCurrent->getSize() > 0) {
+			std::cin >> action;
 
-		// Save / load option
-		if (action == "save" || action == "Save") {
-			saveGame(*sceneCurrent, actionTracker);
-			goto beginLoop;
+			// Save / load option
+			if (action == "save" || action == "Save") {
+				saveGame(*sceneCurrent, actionTracker);
+				goto beginLoop;
+			}
+
+			else if (action == "load" || action == "Load") {
+
+				int loadPos, loadVersion;
+				loadGame(loadPos, loadVersion, actionTracker);
+
+				sceneCurrent = &sceneList[loadPos].version[loadVersion];
+
+				goto beginLoop;
+			}
 		}
 
-		else if (action == "load" || action == "Load") {
-
-			int loadPos, loadVersion;
-			loadGame(loadPos, loadVersion, actionTracker);
-			
-			sceneCurrent = &sceneList[loadPos].version[loadVersion];
-
-			goto beginLoop;
-		}
-		
 		//Set next scene
 		sceneCurrent = &sceneList[sceneCurrent->nextScene(action, actionTracker)].version[0];
 		
@@ -55,8 +57,6 @@ int main(){
 	} while (sceneCurrent->getPosition() != sceneList.size() - 1);
 
 	std::cout << "Congratulations you completed the game!" << std::endl;
-
-	delete sceneCurrent;
 
 	return 0;
 }

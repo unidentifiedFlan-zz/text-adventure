@@ -30,7 +30,7 @@ sceneVersion::sceneVersion(int pos, int vNum, std::string Descrip, bool fnalV,
 int sceneVersion::nextScene(std::string action, std::vector<std::vector<std::vector<bool>>> &actionTracker) {
 
 	bool actionCheck = false;
-
+	
 	//Looping through all possible options for given scene to find match with input option chosen by player
 	for (unsigned i = 0; i < options.size(); i++) {
 
@@ -45,6 +45,7 @@ int sceneVersion::nextScene(std::string action, std::vector<std::vector<std::vec
 		}
 
 	}
+	
 	//After looping through all other options, if there is no progress assume input invalid
 	std::cout << "Invalid input." << std::endl;
 
@@ -95,7 +96,7 @@ int sceneVersion::updateScene(std::vector<std::vector<std::vector<bool>>> &actio
 
 
 option::option(int pos, int ver, int num, std::string descrip, std::string out, std::vector<std::string> valActs,
-	bool chnge, int Nxt, std::vector<std::vector<std::vector<bool>>> &actionTracker) {
+	bool chnge, int Nxt) {
 
 	position = pos;
 	version = ver;
@@ -118,10 +119,10 @@ option::option(int pos, int ver, int num, std::string descrip, std::string out, 
 int option::consequence( int positionNow, int versionNow, int i, std::vector<std::vector<std::vector<bool>>> &actionTracker) {
 
 	std::cout << output << std::endl;
-
+	
 	//Update complete to signal that this action has been taken. Later
 	//scenes may react to this action having been taken 
-	actionTracker[position][version][number] = true;
+	actionTracker[positionNow][versionNow][i] = true;
 	
 	if (sceneChange == true) {
 

@@ -21,7 +21,7 @@ class option {
 
 public:
 	option(int pos, int ver, int num, std::string descrip, std::string out, std::vector<std::string> valActs,
-		bool chnge, int Nxt, std::vector<std::vector<std::vector<bool>>> &actionTracker);
+		bool chnge, int Nxt);
 
 	int consequence(int positionNow, int versionNow, int i, std::vector<std::vector<std::vector<bool>>> &actionTracker);
 

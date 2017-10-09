@@ -8,15 +8,66 @@ void setScenes(std::vector<scene> &sceneList, std::vector<std::vector<std::vecto
 
 	std::vector<scene*> tempList;
 
-	//List all scenes
+
+	//List all scenes here:
+	scene intro(tempList);
 	scene door(tempList);
 	scene table(tempList);
 	scene end(tempList);
 
-	//Need to add the following version to the end scene so sceneCurrent in main prgm has a sceneVersion to transition to.
-	sceneVersion endV0(end.position, end.version.size(), "", false, { {1,1,1} }, 1);
+	//Need to add the following version to the end scene so sceneCurrent in main prgm has a sceneVersion to transition to
+	//at the end of the game.
+	sceneVersion endV0(end.position, end.version.size(), "", false, { {door.position,1,1} }, 1);
 
 	end.version.push_back(endV0);
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//How to: create scene content:
+	//
+	//Each scene contains versions of that scene representing the scene at different stages of the story. The
+	//constructor takes the following form for creating a version called VER in scene SCE:
+	//
+	//sceneVersion VER(SCE.position, 
+	//                 SCE.version.size(), 
+	//                 string(description of scene),
+	//                 bool(is VER the final version of SCE?), 
+	//                 std::vector<std::vector<int>> (matrix of action co-ords {...{scene, version, option} ...} 
+	//                       indicating which actions must be complete for VER to be updated to the next version), 
+	//                 int(the version number of the next version once VER has been updated));
+	//
+	//Each scene version construction MUST BE followed by: SCE.version.push_back(VER);
+	//
+
+	//In each version are options that can be taken by the player. An option OPT is constructed as follows:
+	//
+	//option OPT(SCE.position, 
+	//			 VER.getVer() - 1, 
+	//           int (option number),
+	//           string( option description), 
+	//           string (output after option is taken), 
+	//           std::vector<std::string> (list of valid actions corresponding to this option),
+	//           bool (Does the scene change if OPT chosen?), 
+	//           int (scene list position of next scene if scene change is true)); 
+	//          
+	//
+	//Each option construction MUST BE followed by: SCE.version[option number].addOption(VER);
+
+
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////Intro//////////////////////////////////////////////////////////////////////////////////////////////////
+
+	sceneVersion intro0(intro.position, intro.version.size(),
+		"Welcome to ROOM ESCAPE 2017! Type 'save' to save the game, or 'load' to load a previous save.",
+		false, { {0,0,0} }, 0);
+
+	intro.version.push_back(intro0);
+
+	option start(intro.position, intro0.getVer() - 1, 0, "Type 'start' to continue.",
+		"", { "start", "1" }, true, door.position);
+
+	intro.version[0].addOption(start);
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		///////door V0: Initial door scene////////////////////////////////////////////////////////////////////////////////
@@ -37,8 +88,8 @@ void setScenes(std::vector<scene> &sceneList, std::vector<std::vector<std::vecto
 	//Recognised inputs
 	std::vector<std::string> valActions = { "1", "Yes", "yes" };
 
-	option doorV0O0(door.position, 0, 0, "Yes",
-		"You move toward the table.", valActions, true, table.position, actionTracker);
+	option doorV0O0(door.position, doorV0.getVer() -1, 0, "Yes",
+		"You move toward the table.", valActions, true, table.position);
 
 	door.version[0].addOption(doorV0O0);
 
@@ -47,8 +98,8 @@ void setScenes(std::vector<scene> &sceneList, std::vector<std::vector<std::vecto
 	//////door: V0 OPTION 2
 	valActions = { "2", "no", "No" };
 
-	option doorV0O1(door.position, 0, 1, "No",
-		"You continue to watch the door...", valActions, false, door.position, actionTracker);
+	option doorV0O1(door.position, doorV0.getVer() - 1, 1, "No",
+		"You continue to watch the door...", valActions, false, door.position);
 
 	door.version[0].addOption(doorV0O1);
 
@@ -70,9 +121,9 @@ void setScenes(std::vector<scene> &sceneList, std::vector<std::vector<std::vecto
 	//door: version1, OPTION 1
 	valActions = { "1", "unlock", "Unlock", "use key", "Use key" };
 
-	option doorV1O0(door.position, 1, 0, "Unlock door with key",
+	option doorV1O0(door.position, 1, doorV1.getVer() - 1, "Unlock door with key",
 		"You open the door and exit the room.",
-		valActions, true, end.position, actionTracker);
+		valActions, true, end.position);
 
 	door.version[1].addOption(doorV1O0);
 
@@ -81,8 +132,8 @@ void setScenes(std::vector<scene> &sceneList, std::vector<std::vector<std::vecto
 	//door: Version1, OPTION 2
 	valActions = { "2", "table", "Table" };
 
-	option doorV1O1(door.position, 1, 1, "Turn toward table",
-		"You turn back toward the table.", valActions, true, table.position, actionTracker);
+	option doorV1O1(door.position, doorV1.getVer() - 1, 1, "Turn toward table",
+		"You turn back toward the table.", valActions, true, table.position);
 
 	door.version[1].addOption(doorV1O1);
 
@@ -104,8 +155,8 @@ void setScenes(std::vector<scene> &sceneList, std::vector<std::vector<std::vecto
 	//table: V0 OPTION 1
 	valActions = { "1", "key", "Key", "pick up key", "Pick up key" };
 
-	option tableV0O0(table.position, 0, 0, "Pick up key",
-		"You pick up the key.", valActions, false, table.position, actionTracker);
+	option tableV0O0(table.position, tableV0.getVer() - 1, 0, "Pick up key",
+		"You pick up the key.", valActions, false, table.position);
 
 	table.version[0].addOption(tableV0O0);
 
@@ -114,8 +165,8 @@ void setScenes(std::vector<scene> &sceneList, std::vector<std::vector<std::vecto
 	//table: V0 OPTION 2
 	valActions = { "2", "door", "Door" };
 
-	option tableV0O1(table.position, 0, 1, "Turn toward door",
-		"You turn back towards to the door.", valActions, true, door.position, actionTracker);
+	option tableV0O1(table.position, tableV0.getVer() - 1, 1, "Turn toward door",
+		"You turn back towards to the door.", valActions, true, door.position);
 
 	table.version[0].addOption(tableV0O1);
 
@@ -137,8 +188,8 @@ void setScenes(std::vector<scene> &sceneList, std::vector<std::vector<std::vecto
 	//table: V1 OPTION 1
 	valActions = { "1", "y", "Y", "yes", "Yes" };
 
-	option tableV1O0(table.position, 1, 0, "Yes",
-		"", valActions, true, door.position, actionTracker);
+	option tableV1O0(table.position, tableV1.getVer() - 1, 0, "Yes",
+		"", valActions, true, door.position);
 
 	table.version[1].addOption(tableV1O0);
 
@@ -147,8 +198,8 @@ void setScenes(std::vector<scene> &sceneList, std::vector<std::vector<std::vecto
 	//table : V1 OPTION 2
 	valActions = { "2", "n", "N", "No", "no" };
 
-	option tableV1O1(table.position, 1, 1, "No",
-		"You continue to watch the table...", valActions, false, table.position, actionTracker);
+	option tableV1O1(table.position, tableV1.getVer() - 1, 1, "No",
+		"You continue to watch the table...", valActions, false, table.position);
 
 	table.version[1].addOption(tableV1O1);
 
