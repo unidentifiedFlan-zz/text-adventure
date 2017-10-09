@@ -12,7 +12,7 @@ int main(){
 	std::vector<scene> sceneList;
 	std::vector<std::vector<std::vector<bool>>> actionTracker;
 	
-	//Initialise using stored scene values in game-specific file and header (e.g adventure.cpp, adventure1.h)
+	//Initialise using stored scene values in game-specific file and header (e.g adventure1.cpp, adventure1.h)
 	setScenes(sceneList, actionTracker);
 	
 	sceneVersion *sceneCurrent;
