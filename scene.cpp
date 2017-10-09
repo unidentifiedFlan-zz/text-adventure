@@ -1,6 +1,4 @@
 // Scenes.cpp : consequences of player choosing a particular option 
-// Big issue is what is accepted as an input action. Find a way to expand possible input
-// options using vector<vector<string>> possibleAction
 
 
 #include "stdafx.h"
