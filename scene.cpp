@@ -117,11 +117,10 @@ option::option(int pos, int ver, int num, std::string descrip, std::string out, 
 int option::consequence( int positionNow, int versionNow, int i, std::vector<std::vector<std::vector<bool>>> &actionTracker) {
 
 	std::cout << output << std::endl;
-	
 	//Update complete to signal that this action has been taken. Later
 	//scenes may react to this action having been taken 
 	actionTracker[positionNow][versionNow][i] = true;
-	
+
 	if (sceneChange == true) {
 
 		return nextScene;
