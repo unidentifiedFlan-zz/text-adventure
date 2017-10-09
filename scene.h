@@ -69,7 +69,7 @@ public:
 		options.push_back(newOption);
 	}
 
-	int getSize() {
+	int numOptions() {
 		return options.size();
 	}
 };

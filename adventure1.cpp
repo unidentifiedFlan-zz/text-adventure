@@ -231,7 +231,7 @@ void initialiseActionTracker(std::vector<scene> &sceneList, std::vector<std::vec
 		for (unsigned j = 0; j < sceneList[i].version.size(); j++) {
 			bool tempAction = false;
 			std::vector<bool> tempVector;
-			tempVector.assign(sceneList[i].version[j].getSize(), tempAction);
+			tempVector.assign(sceneList[i].version[j].numOptions(), tempAction);
 			tempMatrix.push_back(tempVector);
 
 		}

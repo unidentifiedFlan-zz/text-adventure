@@ -30,7 +30,7 @@ int main(){
 		
 		sceneCurrent->sceneOutput();
 		
-		if (sceneCurrent->getSize() > 0) {
+		if (sceneCurrent->numOptions() > 0) {
 			std::cin >> action;
 
 			// Save / load option
