@@ -1,4 +1,4 @@
-// Adventure.cpp : An adventure game with a disappointing but not too surprising lack of depth
+// Adventure.cpp 
 // Main program
 
 #include "stdafx.h"
